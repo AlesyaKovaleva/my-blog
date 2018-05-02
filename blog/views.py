@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
+from django.db.models import Q
 
 
 def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
     return render(request, 'blog/post_list.html', {'posts': posts})
 
 
@@ -102,3 +103,11 @@ def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('post_detail', pk=comment.post.pk)
+
+
+def search(request):
+    q = request.GET.get('q')
+    if q:
+        result_search = Post.objects.filter(Q(author__username__icontains=q) | Q(title__icontains=q) | Q(text__icontains=q))
+        return render(request, 'blog/search.html', {'result_search': result_search, 'q': q})
+    return render(request, 'blog/search.html')

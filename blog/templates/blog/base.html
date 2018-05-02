@@ -9,19 +9,33 @@
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
     </head>
     <body>
-        <div class="page-header">
+        <div class="page-header container-fluid">
+            <div class="row">
             {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" class="top-menu"><span class="glyphicon glyphicon-off"></span></a>
-                <span class="top-menu">&nbsp;</span>
-                <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-                <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
-                <p class="top-menu">
-                    Hi, {{ user.username|capfirst }}!
-                </p>
+
+                <a href="{% url 'logout' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-off"></span></a>
+                <span class="top-menu pull-right">&nbsp;</span>
+                <a href="{% url 'post_new' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+                <a href="{% url 'post_draft_list' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-edit"></span></a>
+
+                <span class="top-menu pull-right">Hi, {{ user.username|capfirst }}!</span>
             {% else %}
-                <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+                <a href="{% url 'login' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-lock"></span></a>
             {% endif %}
-                <h1><a href="/">Blog</a></h1>
+                <form class="form-inline pull-right" style="margin-right: 20px" action="{% url 'search' %}"
+                          method="GET">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" placeholder="Поиск" name="q">
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-default" type="submit"><i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <h1 class="col-sm-12"><a href="/">Blog</a></h1>
+            </div>
         </div>
         <div class="content container">
             <div class="row">

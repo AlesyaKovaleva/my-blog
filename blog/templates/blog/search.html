@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<h5>Search results for <strong>{{ q }}</strong>:</h5>
+
+<ul>
+{% for result in result_search.all %}
+    <li><a href="{% url 'post_detail' pk=result.pk %}">{{ result }}</a></li>
+    {% empty %}
+        <p>Not found</p>
+{% endfor %}
+</ul>
+
+{% endblock %}
+
