@@ -16,4 +16,8 @@ urlpatterns = [
     url(r'^comment/(?P<pk>\d+)/approve/$', views.comment_approve, name='comment_approve'),
     url(r'^comment/(?P<pk>\d+)/remove/$', views.comment_remove, name='comment_remove'),
     url(r'^search/', views.search, name='search'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^author/(?P<pk>\d+)/$', views.AuthorView.as_view(), name='author'),
+    url(r'^author_info/(?P<pk>\d+)/$', views.AuthorInfoView.as_view(), name='author_info'),
+    url(r'signup/', views.SignUpView.as_view(), name='signup'),
+
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

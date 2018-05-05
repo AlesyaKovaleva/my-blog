@@ -4,13 +4,13 @@
     {% for post in posts %}
         <div class="post">
             <div class="date">
-                <span>{{ post.published_date }}</span><span class="pull-right">Автор: {{ post.author|capfirst }}</span>
+                <span>{{ post.published_date }}</span><a href="{% url 'author_info' pk=post.author.pk %}" class="pull-right">Автор: {{ post.author|capfirst }}</a>
             </div>
             <h2 class="text-justify"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
-            <p class="text-justify">{{ post.text|linebreaksbr }}</p>
+            <p class="text-justify">{{ post.text|linebreaksbr|truncatewords:100 }}</p>
 
             {% if post.image %}
-            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width: 100%">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-thumbnail" style="width: 100%">
             {% endif %}
 
             <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>

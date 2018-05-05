@@ -10,7 +10,7 @@
             <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
         {% endif %}
 
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user == post.author.user_id %}
             <div align="right"><a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
                 <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a></div>
         {% endif %}

@@ -3,6 +3,7 @@
 <html lang="ru">
     <head>
         <title>Blog</title>
+
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic" rel="stylesheet" type="text/css">
@@ -18,7 +19,7 @@
                 <a href="{% url 'post_new' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-plus"></span></a>
                 <a href="{% url 'post_draft_list' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-edit"></span></a>
 
-                <span class="top-menu pull-right">Hi, {{ user.username|capfirst }}!</span>
+                <a href="{% url 'author_info' pk=user.author.pk %}" class="top-menu pull-right">Hi, {{ user.username|capfirst }}!</a>
             {% else %}
                 <a href="{% url 'login' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-lock"></span></a>
             {% endif %}
@@ -37,9 +38,9 @@
                 <h1 class="col-sm-12"><a href="/">Blog</a></h1>
             </div>
         </div>
-        <div class="content container">
+        <div class="container">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-10 col-md-offset-1">
                 {% block content %}
                 {% endblock %}
                 </div>

@@ -2,7 +2,7 @@
 <div class="comment">
     <div class="date">
         {{ comment.created_date }}
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user.author == comment.author %}
             <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
         {% endif %}
         {% if not comment.approved_comment %}

@@ -1,0 +1,44 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<h1>Author:</h1>
+{% if user.is_authenticated and user == author.user_id %}
+    <p><a href="{% url 'author' pk=user.author.pk %}" class="text-justify">Редактировать</a></p>
+{% endif %}
+<div class="row">
+    <div class="col-md-6">
+        {% if author.avatar %}
+            <img src="{{ author.avatar.url }}" alt="{{ author }}" class="img-thumbnail" style="width: 100%">
+        {% endif %}
+    </div>
+
+    <div class="col-md-6">
+        {% if author.nickname %}
+            <p><strong>Ник:</strong> {{ author.nickname }}</p>
+        {% endif %}
+        {% if author.first_name %}
+            <p><strong>Имя:</strong> {{ author.first_name }}</p>
+        {% endif %}
+        {% if author.last_name %}
+            <p><strong>Фамилия:</strong> {{ author.last_name }}</p>
+        {% endif %}
+        {% if author.birth_date %}
+            <p><strong>Дата рождения:</strong> {{ author.birth_date }}</p>
+        {% endif %}
+        {% if author.country %}
+            <p><strong>Страна:</strong> {{ author.country }}</p>
+        {% endif %}
+        {% if author.gender %}
+            <p><strong>Пол:</strong> {{ author.gender }}</p>
+        {% endif %}
+        {% if author.author_info %}
+            <p><strong>Информация:</strong> {{ author.author_info }}</p>
+        {% endif %}
+    </div>
+
+
+
+{% endblock %}
+
+</div>

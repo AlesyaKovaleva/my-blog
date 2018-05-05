@@ -1,9 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import Post, Comment
-from .forms import PostForm, CommentForm
+from .models import Post, Comment, User, Author
+from .forms import PostForm, CommentForm, AuthorForm
 from django.db.models import Q
+from django.views import View
+from django.contrib.auth import login, authenticate
+from .forms import SignUpForm
 
 
 def post_list(request):
@@ -22,8 +25,7 @@ def post_new(request):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user
-            # post.published_date = timezone.now()
+            post.author = request.user.author
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
@@ -38,8 +40,7 @@ def post_edit(request, pk):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user
-            # post.published_date = timezone.now()
+            post.author = request.user.author
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
@@ -49,7 +50,7 @@ def post_edit(request, pk):
 
 @login_required
 def post_draft_list(request):
-    posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
+    posts = Post.objects.filter(published_date__isnull=True, author=request.user.author).order_by('created_date')
     return render(request, 'blog/post_draft_list.html', {'posts': posts})
 
 
@@ -77,7 +78,7 @@ def add_comment_to_post(request, pk):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
-            comment.author = request.user
+            comment.author = request.user.author
 
             if 'parent_comment' in request.GET:
                 parent_comment_id = request.GET['parent_comment']
@@ -108,6 +109,54 @@ def comment_remove(request, pk):
 def search(request):
     q = request.GET.get('q')
     if q:
-        result_search = Post.objects.filter(Q(author__username__icontains=q) | Q(title__icontains=q) | Q(text__icontains=q))
+        result_search = Post.objects.filter(
+            Q(author__user_id__username__icontains=q) | Q(title__icontains=q) | Q(text__icontains=q)
+        )
         return render(request, 'blog/search.html', {'result_search': result_search, 'q': q})
     return render(request, 'blog/search.html')
+
+
+class AuthorView(View):
+    def get(self, request, pk):
+        author = get_object_or_404(Author, pk=pk)
+        form = AuthorForm(instance=author)
+        return render(request, 'blog/author.html', context={'form': form})
+
+    def post(self, request, pk):
+        author = get_object_or_404(Author, pk=pk)
+        form = AuthorForm(request.POST, request.FILES, instance=author)
+
+        if form.is_valid():
+            form.save()
+
+        return render(request, 'blog/author.html', context={'form': form})
+
+
+class AuthorInfoView(View):
+    def get(self, request, pk):
+        author = get_object_or_404(Author, pk=pk)
+        gender = {k: v for (k, v) in Author.GENDER_CHOICES}
+
+        if author.gender:
+            author.gender = gender[author.gender]
+        return render(request, 'blog/author_info.html', context={'author': author})
+
+
+class SignUpView(View):
+    def post(self, request):
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            person = Author.objects.create(user_id=user)
+            person.last_name = form.cleaned_data.get('last_name')
+            person.first_name = form.cleaned_data.get('first_name')
+            person.save()
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+            return redirect('post_list')
+        return render(request, 'blog/signup.html', {'form': form})
+
+    def get(self, request):
+        form = SignUpForm()
+        return render(request, 'blog/signup.html', {'form': form})
