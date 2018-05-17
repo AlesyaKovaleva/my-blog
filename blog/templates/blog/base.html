@@ -3,7 +3,7 @@
 <html lang="ru">
     <head>
         <title>Blog</title>
-
+        <link rel="SHORTCUT ICON" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="{% static 'js/like.js' %}"></script>
+
     </head>
     <body>
         <div class="page-header container-fluid">
@@ -47,10 +48,10 @@
                     </div>
                 </form>
             </div>
-                    <a href="/">
-                        <img src="/static/img/logo7.png" style="width: 7%">
-                        <img src="/static/img/logo8.png" style="width: 15%" hspace="55">
-                    </a>
+                <a href="/">
+                    <img src="/static/img/logo7.png" style="width: 8%">
+                    <img src="/static/img/logo8.png" style="width: 15%" hspace="55">
+                </a>
         </div>
         <div class="container">
             {% block nav %}
