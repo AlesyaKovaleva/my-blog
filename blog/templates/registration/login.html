@@ -2,7 +2,7 @@
 
 {% block content %}
     {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
+        <p>Ваш логин или пароль не совподают. Попробуйте еще раз.</p>
     {% endif %}
 
 <h2 class="text-center">Авторизация</h2>
@@ -10,7 +10,7 @@
     <form method="post" action="{% url 'login' %}" class="form-horizontal">
         {% csrf_token %}
     <div class="form-group {% if 'username' in form.errors %}has-error{% endif %}">
-        <label for="username" class="col-sm-3 control-label">Имя пользователя</label>
+        <label for="username" class="col-sm-3 control-label">Имя пользователя:</label>
         <div class="col-sm-9">
             <input type="text" class="form-control" id="username" name="username" placeholder="Имя пользователя" required>
             {% for error in form.errors.username %}
@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-group {% if 'password' in form.errors %}has-error{% endif %}">
-        <label for="password" class="col-sm-3 control-label">Пароль</label>
+        <label for="password" class="col-sm-3 control-label">Пароль:</label>
         <div class="col-sm-9">
             <input type="password" class="form-control" id="password" name="password" placeholder="" required>
             {% for error in form.errors.password1 %}
@@ -39,10 +39,6 @@
             <a class="btn btn-primary pull-right" href="{% url 'signup' %}" role="button">Регистрация</a>
         </div>
     </div>
-
-
-
-
      </form>
 
 {% endblock %}

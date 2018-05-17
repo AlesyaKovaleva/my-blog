@@ -2,24 +2,40 @@
 <div class="comment">
     <div class="date">
         {{ comment.created_date }}
-        {% if user.is_authenticated and user.author == comment.author %}
-            <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+        {% if user.is_authenticated %}
+            {% if user.author == comment.author or user.author.can_delete %}
+            <a class="btn btn-sm text-danger" href="{% url 'comment_remove' pk=comment.pk %}" title="Удалить">
+                <span class="glyphicon glyphicon-remove"></span>
+            </a>
+            {% endif %}
         {% endif %}
-        {% if not comment.approved_comment %}
-            <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+        {% if not comment.approved_comment and user.author.can_approve %}
+            <a class="btn btn-sm text-success" href="{% url 'comment_approve' pk=comment.pk %}" title="Подтвердить">
+                <span class="glyphicon glyphicon-ok"></span>
+            </a>
         {% endif %}
     </div>
     <strong>{{ comment.author|capfirst }}</strong>
     <p>{{ comment.text|linebreaks }}</p>
-    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}?parent_comment={{comment.pk}}">Reply</a>
-
+    <span class="pull-left">
+    <a href="#" class="btn" data-id="{{ comment.id }}" data-type="comment" data-action="like" title="Нравится">
+        <span class="glyphicon glyphicon-thumbs-up"></span>
+        <span data-count="like">{{ comment.votes.likes.count }}</span>
+    </a>
+    <a href="#" class="btn" data-id="{{ comment.id }}" data-type="comment" data-action="dislike" title="Не нравится">
+        <span class="glyphicon glyphicon-thumbs-down"></span>
+        <span data-count="dislike">{{ comment.votes.dislikes.count }}</span>
+    </a>
+    </span>
+    <button type="button" class="btn btn-default btn-xs">
+    <a href="{% url 'add_comment_to_post' pk=post.pk %}?parent_comment={{comment.pk}}">Ответить</a>
+    </button>
     <div class="replies">
     {% for reply in comment.replies.all %}
         {% with comment=reply template_name="blog/comment.html" %}
            {% include template_name %}
         {% endwith %}
     {% endfor %}
-
     </div>
 </div>
 {% endif %}

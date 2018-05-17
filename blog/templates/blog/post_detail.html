@@ -4,15 +4,24 @@
     <div class="post">
         {% if post.published_date %}
             <div class="date">
-                {{ post.published_date }}
+                <span>{{ post.published_date }}</span>
+                <a href="{% url 'author_info' pk=post.author.pk %}" class="pull-right">
+                    Автор: {{ post.author|capfirst }}
+                </a>
             </div>
         {% else %}
             <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
         {% endif %}
 
         {% if user.is_authenticated and user == post.author.user_id %}
-            <div align="right"><a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-                <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a></div>
+            <div align="right">
+                <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+                <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </a>
+            </div>
         {% endif %}
 
         <h1>{{ post.title }}</h1>
@@ -24,11 +33,12 @@
         {% endif %}
     </div>
 <hr>
-
-<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+<button type="button" class="btn btn-default btn-xs">
+    <a href="{% url 'add_comment_to_post' pk=post.pk %}">Добавить комментарий</a>
+</button>
 {% for comment in post.root_comments %}
     {% include 'blog/comment.html' %}
 {% empty %}
-    <p>No comments here yet :(</p>
+    <p>Нет ни одного комментария!</p>
 {% endfor %}
 {% endblock %}

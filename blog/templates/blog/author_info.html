@@ -2,12 +2,12 @@
 
 {% block content %}
 
-<h1>Author:</h1>
+<h1>Автор:</h1>
 {% if user.is_authenticated and user == author.user_id %}
     <p><a href="{% url 'author' pk=user.author.pk %}" class="text-justify">Редактировать</a></p>
 {% endif %}
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         {% if author.avatar %}
             <img src="{{ author.avatar.url }}" alt="{{ author }}" class="img-thumbnail" style="width: 100%">
         {% endif %}
@@ -15,30 +15,85 @@
 
     <div class="col-md-6">
         {% if author.nickname %}
-            <p><strong>Ник:</strong> {{ author.nickname }}</p>
+        <div class="row">
+        <div class="col-md-5">Ник:</div><div class="col-md-7">{{ author.nickname }}</div>
+        </div>
         {% endif %}
+
         {% if author.first_name %}
-            <p><strong>Имя:</strong> {{ author.first_name }}</p>
+        <div class="row">
+        <div class="col-md-5">Имя:</div><div class="col-md-7">{{ author.first_name }}</div>
+        </div>
         {% endif %}
         {% if author.last_name %}
-            <p><strong>Фамилия:</strong> {{ author.last_name }}</p>
+        <div class="row">
+        <div class="col-md-5">Фамилия:</div><div class="col-md-7">{{ author.last_name }}</div>
+        </div>
         {% endif %}
         {% if author.birth_date %}
-            <p><strong>Дата рождения:</strong> {{ author.birth_date }}</p>
+        <div class="row">
+        <div class="col-md-5">Дата рождения:</div><div class="col-md-7">{{ author.birth_date }}</div>
+        </div>
         {% endif %}
         {% if author.country %}
-            <p><strong>Страна:</strong> {{ author.country }}</p>
+        <div class="row">
+        <div class="col-md-5">Страна:</div><div class="col-md-7">{{ author.country }}</div>
+        </div>
         {% endif %}
         {% if author.gender %}
-            <p><strong>Пол:</strong> {{ author.gender }}</p>
+        <div class="row">
+        <div class="col-md-5">Пол:</div><div class="col-md-7">{{ author.gender }}</div>
+        </div>
         {% endif %}
         {% if author.author_info %}
-            <p><strong>Информация:</strong> {{ author.author_info }}</p>
+        <div class="row">
+        <div class="col-md-5">Информация:</div><div class="col-md-7"><p class="text-justify">{{ author.author_info }}</p></div>
+        </div>
         {% endif %}
     </div>
 
+    <div class="row">
+    <div class="col-sm-12">&nbsp;</div>
+    </div>
+    <hr>
 
+    {% for post in posts %}
+        <div class="post">
+            <div class="date">
+                <span>{{ post.published_date }}</span>
+                <a href="{% url 'author_info' pk=post.author.pk %}" class="pull-right">Автор: {{ post.author|capfirst }}</a>
+            </div>
+            <h2 class="text-justify"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+            {% if post.text|length >= 151 %}
+            <p class="text-justify">{{ post.text|linebreaksbr|truncatewords:150 }}
+                <a class="text-right" href="{% url 'post_detail' pk=post.pk %}">&nbsp;Читать далее >></a>
+            </p>
+            {% else %}
+            <p class="text-justify">{{ post.text|linebreaksbr }}</p>
+            {% endif %}
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-thumbnail" style="width: 100%">
+            {% endif %}
 
+            <p class="lead">
+                <a class="btn" href="{% url 'post_detail' pk=post.pk %}">
+                    <span class="glyphicon glyphicon-comment"></span>
+                &nbsp;{{ post.approved_comments.count }}
+                </a>
+                <span class="pull-right">
+                    <a href="#" class="btn" data-id="{{ post.id }}" data-type="post" data-action="like" title="Нравится">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span data-count="like">{{ post.votes.likes.count }}</span>
+                    </a>
+                    <a href="#" class="btn" data-id="{{ post.id }}" data-type="post" data-action="dislike" title="Не нравится">
+                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                        <span data-count="dislike">{{ post.votes.dislikes.count }}</span>
+                    </a>
+                </span>
+            </p>
+        </div>
+    {% empty %}
+        <p>Нет ни одного поста!</p>
+    {% endfor %}
 {% endblock %}
-
 </div>

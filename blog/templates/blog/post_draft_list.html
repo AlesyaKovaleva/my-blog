@@ -11,5 +11,7 @@
             <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width: 100%">
             {% endif %}
         </div>
+    {% empty %}
+        <p>Нет ни одного черновика!</p>
     {% endfor %}
 {% endblock %}

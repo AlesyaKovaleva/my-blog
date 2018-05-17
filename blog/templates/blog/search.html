@@ -2,13 +2,21 @@
 
 {% block content %}
 
-<h5>Search results for <strong>{{ q }}</strong>:</h5>
-
+<h5>Поиск результатов: <strong>{{ q }}</strong>:</h5>
+<p>Поиск среди постов:</p>
 <ul>
 {% for result in result_search.all %}
     <li><a href="{% url 'post_detail' pk=result.pk %}">{{ result }}</a></li>
     {% empty %}
-        <p>Not found</p>
+    <li><p><strong>Постов не найдено!</strong></p></li>
+{% endfor %}
+</ul>
+<p>Поиск среди Авторов:</p>
+<ul>
+{% for author in author_search.all %}
+    <li><a href="{% url 'author_info' pk=author.pk %}">{{ author }}</a></li>
+    {% empty %}
+    <li><p><strong>Авторов не найдено!</strong></p></li>
 {% endfor %}
 </ul>
 

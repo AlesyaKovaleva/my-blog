@@ -7,7 +7,7 @@
     {% csrf_token %}
 
     <div class="form-group {% if 'username' in form.errors %}has-error{% endif %}">
-        <label for="username" class="col-sm-3 control-label">Имя пользователя</label>
+        <label for="username" class="col-sm-3 control-label">Имя пользователя:</label>
         <div class="col-sm-9">
             <input type="text" class="form-control" id="username" name="username" placeholder="Nickname" required>
             {% for error in form.errors.username %}
@@ -19,7 +19,7 @@
     </div>
 
     <div class="form-group {% if 'first_name' in form.errors %}has-error{% endif %}">
-      <label for="first_name" class="col-sm-3 control-label">Имя</label>
+      <label for="first_name" class="col-sm-3 control-label">Имя:</label>
       <div class="col-sm-9">
           <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Имя" required>
           {% for error in form.errors.first_name %}
@@ -31,7 +31,7 @@
     </div>
 
     <div class="form-group {% if 'last_name' in form.errors %}has-error{% endif %}">
-      <label for="last_name" class="col-sm-3 control-label">Фамилия</label>
+      <label for="last_name" class="col-sm-3 control-label">Фамилия:</label>
       <div class="col-sm-9">
           <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" required>
           {% for error in form.errors.last_name %}
@@ -43,7 +43,7 @@
     </div>
 
     <div class="form-group {% if 'email' in form.errors %}has-error{% endif %}">
-      <label for="email" class="col-sm-3 control-label">Email</label>
+      <label for="email" class="col-sm-3 control-label">Email:</label>
       <div class="col-sm-9">
           <input type="email" class="form-control" id="email" name="email" placeholder="your.email@example.com" required>
           {% for error in form.errors.email %}
@@ -55,7 +55,7 @@
     </div>
 
     <div class="form-group {% if 'password1' in form.errors %}has-error{% endif %}">
-      <label for="password1" class="col-sm-3 control-label">Пароль</label>
+      <label for="password1" class="col-sm-3 control-label">Пароль:</label>
       <div class="col-sm-9">
           <input type="password" class="form-control" id="password1" name="password1" placeholder="" required>
           {% for error in form.errors.password1 %}
@@ -67,7 +67,7 @@
     </div>
 
     <div class="form-group {% if 'password2' in form.errors %}has-error{% endif %}">
-      <label for="password2" class="col-sm-3 control-label">Повторите пароль</label>
+      <label for="password2" class="col-sm-3 control-label">Повторите пароль:</label>
       <div class="col-sm-9">
           <input type="password" class="form-control" id="password2" name="password2" placeholder="" required>
           {% for error in form.errors.password2 %}

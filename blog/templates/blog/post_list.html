@@ -1,19 +1,68 @@
 {% extends 'blog/base.html' %}
 
+{% block nav %}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1 z-top">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="{% if sorted_by == 'comment' %}active{% endif %}">
+                <a href="{% url 'post_list' %}?sorted_by_comment">
+                    <h4>Самые комментируемые посты</h4>
+                </a>
+            </li>
+            <li class="{% if sorted_by == 'date' %}active{% endif %}">
+                <a href="{% url 'post_list' %}">
+                    <h4>Последние посты</h4>
+                </a>
+            </li>
+            <li class="{% if sorted_by == 'likes' %}active{% endif %}">
+                <a href="{% url 'post_list' %}?sorted_by_likes">
+                    <h4>Самые популярные посты</h4>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
 {% block content %}
     {% for post in posts %}
         <div class="post">
             <div class="date">
-                <span>{{ post.published_date }}</span><a href="{% url 'author_info' pk=post.author.pk %}" class="pull-right">Автор: {{ post.author|capfirst }}</a>
+                <span>{{ post.published_date }}</span>
+                <a href="{% url 'author_info' pk=post.author.pk %}" class="pull-right">
+                    Автор: {{ post.author|capfirst }}
+                </a>
             </div>
             <h2 class="text-justify"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
-            <p class="text-justify">{{ post.text|linebreaksbr|truncatewords:100 }}</p>
-
+            {% if post.text|length >= 151 %}
+            <p class="text-justify">{{ post.text|linebreaksbr|truncatewords:150 }}
+                <a class="text-right" href="{% url 'post_detail' pk=post.pk %}">&nbsp;Читать далее >></a>
+            </p>
+            {% else %}
+            <p class="text-justify">{{ post.text|linebreaksbr }}</p>
+            {% endif %}
             {% if post.image %}
             <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-thumbnail" style="width: 100%">
             {% endif %}
 
-            <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
+            <p class="lead">
+                <a class="btn" href="{% url 'post_detail' pk=post.pk %}">
+                    <span class="glyphicon glyphicon-comment"></span>
+                &nbsp;{{ post.approved_comments.count }}
+                </a>
+                <span class="pull-right">
+                    <a href="#" class="btn" data-id="{{ post.id }}" data-type="post" data-action="like" title="Нравится">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span data-count="like">{{ post.votes.likes.count }}</span>
+                    </a>
+                    <a href="#" class="btn" data-id="{{ post.id }}" data-type="post" data-action="dislike" title="Не нравится">
+                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                        <span data-count="dislike">{{ post.votes.dislikes.count }}</span>
+                    </a>
+                </span>
+            </p>
         </div>
+    {% empty %}
+        <p>No posts here yet!</p>
     {% endfor %}
 {% endblock %}

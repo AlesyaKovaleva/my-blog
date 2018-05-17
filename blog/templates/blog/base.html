@@ -5,40 +5,57 @@
         <title>Blog</title>
 
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic" rel="stylesheet" type="text/css">
+        <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{% static 'js/like.js' %}"></script>
     </head>
     <body>
         <div class="page-header container-fluid">
             <div class="row">
+
             {% if user.is_authenticated %}
-
-                <a href="{% url 'logout' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-off"></span></a>
+                <a href="{% url 'logout' %}" class="top-menu pull-right" title="Выйти">
+                    <span class="glyphicon glyphicon-off"></span>
+                </a>
                 <span class="top-menu pull-right">&nbsp;</span>
-                <a href="{% url 'post_new' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-plus"></span></a>
-                <a href="{% url 'post_draft_list' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-edit"></span></a>
-
-                <a href="{% url 'author_info' pk=user.author.pk %}" class="top-menu pull-right">Hi, {{ user.username|capfirst }}!</a>
+                <a href="{% url 'post_new' %}" class="top-menu pull-right" title="Создать пост">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+                <a href="{% url 'post_draft_list' %}" class="top-menu pull-right" title="Черновики">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </a>
+                <a href="{% url 'author_info' pk=user.author.pk %}" class="top-menu pull-right">
+                    Hi, {{ user.username|capfirst }}!
+                </a>
             {% else %}
-                <a href="{% url 'login' %}" class="top-menu pull-right"><span class="glyphicon glyphicon-lock"></span></a>
+                <a href="{% url 'login' %}" class="top-menu pull-right" title="Войти">
+                    <span class="glyphicon glyphicon-lock"></span>
+                </a>
             {% endif %}
                 <form class="form-inline pull-right" style="margin-right: 20px" action="{% url 'search' %}"
                           method="GET">
                     <div class="input-group">
                         <input type="text" class="form-control input-sm" placeholder="Поиск" name="q">
                         <div class="input-group-btn">
-                            <button class="btn btn-sm btn-default" type="submit"><i class="glyphicon glyphicon-search"></i>
+                            <button class="btn btn-sm btn-default" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="row">
-                <h1 class="col-sm-12"><a href="/">Blog</a></h1>
-            </div>
+                    <a href="/">
+                        <img src="/static/img/logo7.png" style="width: 7%">
+                        <img src="/static/img/logo8.png" style="width: 15%" hspace="55">
+                    </a>
         </div>
         <div class="container">
+            {% block nav %}
+            {% endblock %}
+
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
                 {% block content %}
@@ -46,5 +63,6 @@
                 </div>
             </div>
         </div>
+        <a href="#" id="scrollup" title="Наверх"><span class="glyphicon glyphicon-chevron-up"></span></a>
     </body>
 </html>
